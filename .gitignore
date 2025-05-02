@@ -1,0 +1,8 @@
+dist
+node_modules
+
+.eslintcache
+
+docs/**/*.css
+docs/*umd.js
+docs/*umd.js.map

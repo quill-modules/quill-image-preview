@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Quill Table Module Demo</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, viewport-fit=cover"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+      integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
+    <script type="module" src="./index.umd.js"></script>
+    <link href="./style/index.css" rel="stylesheet" />
+    <style>
+      #btn1,
+      #writable1 {
+        padding: 0 6px;
+        border: 1px solid;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="display: flex; flex-direction: column; max-width: 600px; margin: 20px auto">
+      <div>
+        <button id="btn1">console</button>
+        <button id="writable1">switch writable</button>
+        <div id="editor1" style="height: 600px"></div>
+        <div id="output1"></div>
+      </div>
+    </div>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

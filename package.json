@@ -1,0 +1,47 @@
+{
+  "name": "module-template",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "",
+  "author": "zzxming",
+  "license": "MIT",
+  "keywords": [
+    "quill",
+    "module"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./index.css": "./dist/index.css"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "tsx scripts/build.ts --dev",
+    "build": "tsx scripts/build.ts",
+    "lint": "eslint . --cache"
+  },
+  "peerDependencies": {
+    "quill": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@unocss/cli": "66.1.0-beta.13",
+    "@unocss/eslint-plugin": "66.1.0-beta.13",
+    "@zzxming/eslint-config": "^0.4.5",
+    "minimist": "^1.2.8",
+    "rolldown": "1.0.0-beta.8",
+    "rolldown-plugin-dts": "^0.9.11",
+    "tsx": "^4.19.4",
+    "typescript": "~5.8.3",
+    "unocss": "66.1.0-beta.13"
+  }
+}
