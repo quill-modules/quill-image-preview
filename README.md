@@ -1,3 +1,3 @@
-# module-template
+# QuillImagePreview
 
-An quill module template
+An quill module for image preview popup

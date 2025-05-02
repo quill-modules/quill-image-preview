@@ -25,7 +25,7 @@ const outputOptions: Record<typeof formats[number], (options: { dir: string }) =
     dir,
     entryFileNames: 'index.umd.js',
     format: 'umd',
-    name: 'QuillModule',
+    name: 'QuillImagePreview',
     globals: {
       quill: 'Quill',
     },

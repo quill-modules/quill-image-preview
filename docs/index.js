@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
 const Quill = window.Quill;
-const { Module } = window.QuillModule;
+const { QuillImagePreview } = window.QuillImagePreview;
 
 Quill.register({
-  'modules/template': Module,
+  'modules/image-preview': QuillImagePreview,
 }, true);
 
 const toolbarConfig = [
@@ -25,8 +25,10 @@ const toolbarConfig = [
 const quill1 = new Quill('#editor1', {
   theme: 'snow',
   modules: {
-    toolbar: toolbarConfig,
-    template: true,
+    'toolbar': toolbarConfig,
+    'image-preview': {
+
+    },
   },
 });
 
