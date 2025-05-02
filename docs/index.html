@@ -21,11 +21,13 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
-    <script type="module" src="./index.umd.js"></script>
+    <script type="text/javascript" src="./index.umd.js"></script>
     <link href="./style/index.css" rel="stylesheet" />
     <style>
       #btn1,
-      #writable1 {
+      #writable1,
+      #btn2,
+      #writable2 {
         padding: 0 6px;
         border: 1px solid;
         border-radius: 4px;
@@ -39,8 +41,18 @@
       <div>
         <button id="btn1">console</button>
         <button id="writable1">switch writable</button>
-        <div id="editor1" style="height: 600px"></div>
+        <div id="editor1" style="height: 600px">
+          <p><img src="https://avatars.githubusercontent.com/u/74341337?s=48&v=4" /></p>
+        </div>
         <div id="output1"></div>
+      </div>
+      <div>
+        <button id="btn2">console</button>
+        <button id="writable2">switch writable</button>
+        <div id="editor2" style="height: 600px">
+          <p><img src="https://avatars.githubusercontent.com/u/74341337?s=48&v=4" /></p>
+        </div>
+        <div id="output2"></div>
       </div>
     </div>
     <script type="module" src="./index.js"></script>

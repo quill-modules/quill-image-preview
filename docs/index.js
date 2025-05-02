@@ -31,13 +31,23 @@ const quill1 = new Quill('#editor1', {
     },
   },
 });
+const quill2 = new Quill('#editor2', {
+  theme: 'snow',
+  readOnly: true,
+  modules: {
+    'toolbar': toolbarConfig,
+    'image-preview': {
+      enable: false,
+    },
+  },
+});
 
-const quill = [quill1];
+const quill = [quill1, quill2];
 window.quill = quill;
 
-const output = [output1];
+const output = [output1, output2];
 
-for (const [i, btn] of [btn1].entries()) {
+for (const [i, btn] of [btn1, btn2].entries()) {
   btn.addEventListener('click', () => {
     const contents = quill[i].getContents();
     console.log(contents);
@@ -50,7 +60,7 @@ for (const [i, btn] of [btn1].entries()) {
   });
 }
 
-for (const [i, btn] of [writable1].entries()) {
+for (const [i, btn] of [writable1, writable2].entries()) {
   btn.addEventListener('click', () => {
     quill[i].enable(!quill[i].isEnabled());
   });
