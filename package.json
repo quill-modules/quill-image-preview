@@ -39,6 +39,7 @@
     "@unocss/cli": "66.1.0-beta.13",
     "@unocss/eslint-plugin": "66.1.0-beta.13",
     "@zzxming/eslint-config": "^0.4.5",
+    "eslint": "^9.26.0",
     "minimist": "^1.2.8",
     "rolldown": "1.0.0-beta.8",
     "rolldown-plugin-dts": "^0.9.11",
