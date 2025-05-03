@@ -1,7 +1,8 @@
 import type Quill from 'quill';
 
 export interface QuillImagePreviewOptions {
-  enable: boolean;
+  enableOnEdit: boolean;
+  beforePreviewDisplay: (this: QuillImagePreview, img: HTMLImageElement) => boolean;
 }
 export class QuillImagePreview {
   options: QuillImagePreviewOptions;
@@ -12,14 +13,15 @@ export class QuillImagePreview {
 
   resolveOptions(options: Partial<QuillImagePreviewOptions>) {
     return Object.assign({
-      enable: true,
+      enableOnEdit: true,
+      beforePreviewDisplay: () => false,
     }, options);
   }
 
   imagePreviewCheck = (e: MouseEvent) => {
-    if (!this.quill.isEnabled()) return;
+    if (this.options.enableOnEdit && !this.quill.isEnabled()) return;
     const target = e.target as HTMLElement;
-    if (target && target.tagName === 'IMG') {
+    if (target && target.tagName === 'IMG' && !this.options.beforePreviewDisplay.call(this, target as HTMLImageElement)) {
       this.createImagePreview(target as HTMLImageElement);
     }
   };
