@@ -37,7 +37,7 @@ const quill2 = new Quill('#editor2', {
   modules: {
     'toolbar': toolbarConfig,
     'image-preview': {
-      enable: false,
+      enableOnEdit: false,
     },
   },
 });

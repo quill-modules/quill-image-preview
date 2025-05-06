@@ -19,7 +19,7 @@ export class QuillImagePreview {
   }
 
   imagePreviewCheck = (e: MouseEvent) => {
-    if (this.options.enableOnEdit && !this.quill.isEnabled()) return;
+    if (!this.options.enableOnEdit && this.quill.isEnabled()) return;
     const target = e.target as HTMLElement;
     if (target && target.tagName === 'IMG' && !this.options.beforePreviewDisplay.call(this, target as HTMLImageElement)) {
       this.createImagePreview(target as HTMLImageElement);

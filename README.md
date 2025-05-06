@@ -29,5 +29,5 @@ const quill = new Quill('#editor', {
 
 | attribute            | description                                                    | type                                                           | default        |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- | -------------- |
-| enableOnEdit         | only enable when quill is not enabled                          | `boolean`                                                      | `true`         |
+| enableOnEdit         | only enable when quill is enabled                              | `boolean`                                                      | `true`         |
 | beforePreviewDisplay | before popup display. return `true` will prevent popup trigger | `(this: QuillImagePreview, img: HTMLImageElement) => boolean;` | ` () => false` |
