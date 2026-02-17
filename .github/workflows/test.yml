@@ -1,9 +1,10 @@
-name: autofix.ci
+name: Test Unit
 
 on:
   push:
     branches:
       - main
+      - v**
 
   pull_request:
     branches:
@@ -12,23 +13,25 @@ on:
   merge_group: {}
 
 jobs:
-  lint:
+  test-unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
       - name: Set node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          registry-url: https://registry.npmjs.org/
+          node-version: lts/*
 
       - name: Install
         run: pnpm i
 
-      - name: Lint
-        run: pnpm lint --fix
+      - name: Build
+        run: pnpm build
 
-      - uses: autofix-ci/action@v1.3
+      - name: Unit Tests
+        run: pnpm test

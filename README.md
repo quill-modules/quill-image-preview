@@ -1,4 +1,4 @@
-# QuillImagePreview
+# Quill Image Preview
 
 An quill module for image preview popup
 
@@ -27,7 +27,7 @@ const quill = new Quill('#editor', {
 
 ## Options
 
-| attribute            | description                                                    | type                                                           | default        |
+| Attribute            | Description                                                    | Type                                                           | Default        |
 | -------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- | -------------- |
 | enableOnEdit         | only enable when quill is enabled                              | `boolean`                                                      | `true`         |
 | beforePreviewDisplay | before popup display. return `true` will prevent popup trigger | `(this: QuillImagePreview, img: HTMLImageElement) => boolean;` | ` () => false` |

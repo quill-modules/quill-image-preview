@@ -22,7 +22,7 @@ export default defineConfig({
     ],
   },
   presets: [
-    presetWind4(),
+    presetWind4({ preflights: { reset: false } }),
     presetIcons({
       autoInstall: false,
       warn: true,
