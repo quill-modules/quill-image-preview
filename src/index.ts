@@ -19,7 +19,7 @@ export class QuillImagePreview {
   }
 
   imagePreviewCheck = (e: MouseEvent) => {
-    if (!this.options.enableOnEdit && this.quill.isEnabled()) return;
+    if (this.quill.isEnabled() && !this.options.enableOnEdit) return;
     const target = e.target as HTMLElement;
     if (target && target.tagName === 'IMG' && !this.options.beforePreviewDisplay.call(this, target as HTMLImageElement)) {
       this.createImagePreview(target as HTMLImageElement);
@@ -29,7 +29,7 @@ export class QuillImagePreview {
   createImagePreview(img: HTMLImageElement) {
     const temp = document.createElement('div');
     temp.innerHTML = `
-      <div class="fixed top-0 left-0 right-0 bottom-0 z-500 backdrop-blur-7">
+      <div class="image-preview fixed top-0 left-0 right-0 bottom-0 z-500 backdrop-blur-7">
         <div class="absolute top-0 left-0 right-0 bottom-0 bg-black:50 z--1" />
         <img src="${img.src}" class="max-w-screen max-h-screen w-full h-full object-contain">
       </div>
