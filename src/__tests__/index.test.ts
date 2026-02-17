@@ -39,7 +39,7 @@ describe('imagePreviewCheck', () => {
     expect(createPreviewSpy).not.toHaveBeenCalled();
   });
 
-  it('should respect enableOnEdit option when quill is disabled', () => {
+  it('should allow preview when quill is disabled regardless of enableOnEdit', () => {
     const quill = createEditor({ enableOnEdit: false });
     const module = quill.getModule('image-preview') as QuillImagePreview;
     const createPreviewSpy = vi.spyOn(module, 'createImagePreview');
@@ -54,15 +54,13 @@ describe('imagePreviewCheck', () => {
     Object.defineProperty(clickEvent, 'target', { value: img, writable: false });
     img.dispatchEvent(clickEvent);
 
-    expect(createPreviewSpy).not.toHaveBeenCalled();
+    expect(createPreviewSpy).toHaveBeenCalledWith(img);
   });
 
-  it('should allow preview when enableOnEdit is true even if quill is disabled', () => {
-    const quill = createEditor({ enableOnEdit: true });
+  it('should not allow preview when enableOnEdit is false and quill is enabled', () => {
+    const quill = createEditor({ enableOnEdit: false });
     const module = quill.getModule('image-preview') as QuillImagePreview;
     const createPreviewSpy = vi.spyOn(module, 'createImagePreview');
-
-    quill.disable();
 
     const img = document.createElement('img');
     img.src = 'https://example.com/test.jpg';
@@ -72,7 +70,7 @@ describe('imagePreviewCheck', () => {
     Object.defineProperty(clickEvent, 'target', { value: img, writable: false });
     img.dispatchEvent(clickEvent);
 
-    expect(createPreviewSpy).toHaveBeenCalledWith(img);
+    expect(createPreviewSpy).not.toHaveBeenCalled();
   });
 
   it('should call beforePreviewDisplay hook before showing preview', () => {
