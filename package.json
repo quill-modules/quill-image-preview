@@ -31,7 +31,8 @@
   "scripts": {
     "dev": "tsx scripts/build.ts --dev",
     "build": "tsx scripts/build.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest"
   },
   "peerDependencies": {
     "quill": "^2.0.3"
