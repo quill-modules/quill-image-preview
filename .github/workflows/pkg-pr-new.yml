@@ -1,20 +1,19 @@
-name: Release
-
-permissions:
-  contents: write
-
+name: Continuous Releases
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
+      - v**
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -25,6 +24,11 @@ jobs:
           registry-url: https://registry.npmjs.org/
           node-version: lts/*
 
-      - run: npx changelogithub
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Install
+        run: pnpm i
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish packages
+        run: pnpx pkg-pr-new publish --compact --pnpm

@@ -2,10 +2,14 @@
   "name": "quill-image-preview",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.29.3",
   "description": "",
   "author": "zzxming",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quill-modules/quill-image-preview"
+  },
   "keywords": [
     "quill",
     "module",
@@ -27,24 +31,43 @@
   "scripts": {
     "dev": "tsx scripts/build.ts --dev",
     "build": "tsx scripts/build.ts",
-    "lint": "eslint . --cache"
+    "lint": "eslint"
   },
   "peerDependencies": {
     "quill": "^2.0.3"
   },
   "devDependencies": {
-    "@types/node": "^22.15.3",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
-    "@unocss/cli": "66.1.0-beta.13",
-    "@unocss/eslint-plugin": "66.1.0-beta.13",
-    "@zzxming/eslint-config": "^0.4.5",
-    "eslint": "^9.26.0",
+    "@prettier/plugin-xml": "^3.4.2",
+    "@types/gulp": "^4.0.18",
+    "@types/gulp-clean-css": "^4.3.4",
+    "@types/gulp-less": "^0.0.36",
+    "@types/gulp-postcss": "^8.0.6",
+    "@types/minimist": "^1.2.5",
+    "@types/node": "^22.19.11",
+    "@types/postcss-pxtorem": "^6.1.0",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "@unocss/cli": "^66.6.0",
+    "@unocss/eslint-plugin": "^66.6.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
+    "@zzxming/eslint-config": "^0.6.3",
+    "autoprefixer": "^10.4.24",
+    "eslint": "^10.0.0",
+    "gulp": "^5.0.1",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-less": "^5.0.0",
+    "gulp-postcss": "^10.0.0",
+    "jsdom": "^28.1.0",
     "minimist": "^1.2.8",
-    "rolldown": "1.0.0-beta.8",
-    "rolldown-plugin-dts": "^0.9.11",
-    "tsx": "^4.19.4",
-    "typescript": "~5.8.3",
-    "unocss": "66.1.0-beta.13"
+    "open": "^11.0.0",
+    "postcss-pxtorem": "^6.1.0",
+    "tsdown": "^0.20.3",
+    "tsx": "^4.21.0",
+    "typescript": "~5.9.3",
+    "unocss": "^66.6.0",
+    "vitest": "^4.0.18",
+    "ws": "^8.19.0"
   }
 }

@@ -1,21 +1,23 @@
-import { readFile } from 'node:fs';
-import { createServer } from 'node:http';
+import fs from 'node:fs';
+import http from 'node:http';
 import { extname, join } from 'node:path';
+import open from 'open';
 import { ROOT_PATH } from './constants';
 
-export function startServer() {
-  const hostname = '0.0.0.0';
-  const PORT = 5500;
-  const server = createServer((req, res) => {
-    const filePath = join(ROOT_PATH, req.url === '/' ? 'index.html' : req.url || '');
+const hostname = '127.0.0.1';
+const PORT = 5500;
+
+export function startServer(autoOpenBrowser: boolean) {
+  const server = http.createServer((req, res) => {
+    const filePath = join(ROOT_PATH, req.url === '/' ? 'index.html' : req.url!);
     const fileExtname = String(extname(filePath)).toLowerCase();
-    const mimeTypes = {
+    const mimeTypes: Record<string, string> = {
       '.html': 'text/html',
       '.js': 'text/javascript',
       '.css': 'text/css',
     };
     const contentType = mimeTypes[fileExtname] || 'application/octet-stream';
-    readFile(filePath, (err, content) => {
+    fs.readFile(filePath, (err, content) => {
       if (err) {
         if (err.code === 'ENOENT') {
           res.writeHead(404, { 'Content-Type': 'text/plain' });
@@ -35,5 +37,13 @@ export function startServer() {
 
   server.listen(PORT, hostname, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    if (autoOpenBrowser) {
+      open(`http://localhost:${PORT}/docs/index.html`)
+        .catch((error) => {
+          console.error('Failed to open browser:', error);
+        });
+    }
   });
+
+  return server;
 }

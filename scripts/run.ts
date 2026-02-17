@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process';
+import process from 'node:process';
 import { ROOT_PATH } from './constants';
 
 export function run(command: string, cwd = ROOT_PATH) {
