@@ -1,4 +1,5 @@
 import type Quill from 'quill';
+import { ImageZoom } from './zoom';
 
 export interface QuillImagePreviewOptions {
   enableOnEdit: boolean;
@@ -29,17 +30,27 @@ export class QuillImagePreview {
   createImagePreview(img: HTMLImageElement) {
     const temp = document.createElement('div');
     temp.innerHTML = `
-      <div class="image-preview fixed top-0 left-0 right-0 bottom-0 z-500 backdrop-blur-7">
-        <div class="absolute top-0 left-0 right-0 bottom-0 bg-black:50 z--1" />
-        <img src="${img.src}" class="max-w-screen max-h-screen w-full h-full object-contain">
+      <div class="image-preview">
+        <div class="image-preview-backdrop" />
+        <img src="${img.src}" class="image-preview-img" draggable="false">
       </div>
     `;
-    const wrapper = temp.children[0];
+    const wrapper = temp.children[0] as HTMLElement;
+    const zoomImg = wrapper.querySelector('img') as HTMLImageElement;
+
+    const zoom = new ImageZoom(zoomImg, wrapper);
+
     wrapper.addEventListener('click', () => {
+      if (zoom.shouldPreventClose()) {
+        return;
+      }
+      zoom.destroy();
       document.body.removeChild(wrapper);
     });
+
     document.body.appendChild(wrapper);
   }
 }
 
+export { ImageZoom } from './zoom';
 export default QuillImagePreview;
