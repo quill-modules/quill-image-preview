@@ -26,7 +26,7 @@ const quill1 = new Quill('#editor1', {
   modules: {
     'toolbar': toolbarConfig,
     'image-preview': {
-      enableOnEdit: false,
+      enableOnEdit: true,
     },
   },
 });
