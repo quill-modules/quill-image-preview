@@ -1,10 +1,39 @@
+export type BuiltInButtonType = 'zoomIn' | 'zoomOut' | 'rotate' | 'reset';
+
+export interface ButtonContext {
+  zoom: ImageZoom;
+  event: MouseEvent;
+  preventClose: () => void;
+}
+
+export interface BuiltInButtonConfig {
+  type: BuiltInButtonType;
+  icon?: string;
+  className?: string;
+  disabled?: boolean;
+}
+
+export interface CustomButtonConfig {
+  id: string;
+  icon?: string;
+  className?: string;
+  disabled?: boolean;
+  onClick: (context: ButtonContext) => void | boolean;
+}
+
+export type ButtonConfig = BuiltInButtonConfig | CustomButtonConfig;
+
+export function isCustomButtonConfig(config: ButtonConfig): config is CustomButtonConfig {
+  return 'onClick' in config;
+}
+
 export interface ImageZoomOptions {
   minScale?: number;
   maxScale?: number;
   wheelEnabled?: boolean;
   dragEnabled?: boolean;
   pinchEnabled?: boolean;
-  buttons?: boolean;
+  buttons?: boolean | ButtonConfig[] | ((zoom: ImageZoom) => ButtonConfig[]);
   onZoomChange?: (scale: number) => void;
 }
 
@@ -22,7 +51,33 @@ export class ImageZoom {
   private initialDistance = 0;
   private initialScale = 1;
 
-  private options: Required<ImageZoomOptions>;
+  private buttonConfigs: ButtonConfig[] = [];
+  private buttonElements: Map<string, HTMLElement> = new Map();
+
+  private readonly defaultBuiltInButtons: Record<BuiltInButtonType, BuiltInButtonConfig> = {
+    zoomIn: {
+      type: 'zoomIn',
+      icon: '+',
+      className: 'image-zoom-btn-zoom-in',
+    },
+    zoomOut: {
+      type: 'zoomOut',
+      icon: '−',
+      className: 'image-zoom-btn-zoom-out',
+    },
+    rotate: {
+      type: 'rotate',
+      icon: '↻',
+      className: 'image-zoom-btn-rotate',
+    },
+    reset: {
+      type: 'reset',
+      icon: '⟲',
+      className: 'image-zoom-btn-reset',
+    },
+  };
+
+  private options: Required<Omit<ImageZoomOptions, 'buttons'>> & { buttons: ImageZoomOptions['buttons'] };
   private toolbar: HTMLElement | null = null;
   private boundPointerDown: (e: PointerEvent) => void;
   private boundPointerMove: (e: PointerEvent) => void;
@@ -50,6 +105,9 @@ export class ImageZoom {
       onZoomChange: () => {},
       ...options,
     };
+    if ('buttons' in options) {
+      this.options.buttons = options.buttons;
+    }
 
     this.boundPointerDown = this.onPointerDown.bind(this);
     this.boundPointerMove = this.onPointerMove.bind(this);
@@ -84,43 +142,139 @@ export class ImageZoom {
       this.img.addEventListener('touchend', this.boundTouchEnd);
     }
 
-    if (this.options.buttons) {
+    if (this.shouldShowButtons()) {
       this.createToolbar();
     }
   }
 
   private createToolbar() {
+    this.buttonConfigs = this.resolveButtonConfigs();
+
+    if (this.buttonConfigs.length === 0) {
+      return;
+    }
+
     const toolbar = document.createElement('div');
     toolbar.className = 'image-zoom-toolbar';
-    toolbar.innerHTML = `
-      <button class="image-zoom-btn image-zoom-btn-zoom-out" title="缩小">−</button>
-      <button class="image-zoom-btn image-zoom-btn-rotate" title="旋转">↻</button>
-      <button class="image-zoom-btn image-zoom-btn-zoom-in" title="放大">+</button>
-    `;
 
-    toolbar.querySelector('.image-zoom-btn-zoom-out')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.zoomOut();
+    this.buttonConfigs.forEach((config) => {
+      const button = this.createButton(config);
+      if (button) {
+        toolbar.appendChild(button);
+      }
     });
 
-    toolbar.querySelector('.image-zoom-btn-rotate')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.rotate();
-    });
+    this.appendToolbar(toolbar);
+    this.toolbar = toolbar;
+  }
 
-    toolbar.querySelector('.image-zoom-btn-zoom-in')?.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.zoomIn();
-    });
+  private shouldShowButtons(): boolean {
+    const { buttons } = this.options;
+    return buttons !== false;
+  }
 
+  private resolveButtonConfigs(): ButtonConfig[] {
+    const { buttons } = this.options;
+
+    if (typeof buttons === 'boolean') {
+      return buttons ? this.getDefaultButtons() : [];
+    }
+
+    if (typeof buttons === 'function') {
+      return buttons(this);
+    }
+
+    if (Array.isArray(buttons)) {
+      return buttons.map(config => this.mergeWithDefault(config));
+    }
+
+    return this.getDefaultButtons();
+  }
+
+  private getDefaultButtons(): ButtonConfig[] {
+    return [
+      this.defaultBuiltInButtons.zoomOut,
+      this.defaultBuiltInButtons.rotate,
+      this.defaultBuiltInButtons.zoomIn,
+      this.defaultBuiltInButtons.reset,
+    ];
+  }
+
+  private mergeWithDefault(config: ButtonConfig): ButtonConfig {
+    if (!isCustomButtonConfig(config)) {
+      const defaultConfig = this.defaultBuiltInButtons[config.type];
+      return { ...defaultConfig, ...config };
+    }
+    return config;
+  }
+
+  private createButton(config: ButtonConfig): HTMLElement | null {
+    const button = document.createElement('button');
+    button.className = `image-zoom-btn ${config.className || ''}`.trim();
+
+    const buttonId = isCustomButtonConfig(config) ? config.id : config.type;
+    button.id = `image-zoom-btn-${buttonId}`;
+    button.type = 'button';
+    button.disabled = config.disabled ?? false;
+
+    if (config.icon) {
+      button.innerHTML = config.icon;
+    }
+
+    this.bindButtonEvent(button, config);
+    this.buttonElements.set(buttonId, button);
+
+    return button;
+  }
+
+  private bindButtonEvent(button: HTMLElement, config: ButtonConfig) {
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+
+      if (!isCustomButtonConfig(config)) {
+        this.handleBuiltInButton(config.type);
+        return;
+      }
+
+      const context: ButtonContext = {
+        zoom: this,
+        event: e as MouseEvent,
+        preventClose: () => { this.hasMoved = true; },
+      };
+
+      const result = config.onClick(context);
+      if (result === true) context.preventClose();
+    });
+  }
+
+  private handleBuiltInButton(type: BuiltInButtonType) {
+    switch (type) {
+      case 'zoomIn': {
+        this.zoomIn();
+        break;
+      }
+      case 'zoomOut': {
+        this.zoomOut();
+        break;
+      }
+      case 'rotate': {
+        this.rotate();
+        break;
+      }
+      case 'reset': {
+        this.reset();
+        break;
+      }
+    }
+  }
+
+  private appendToolbar(toolbar: HTMLElement) {
     if (this.container) {
       this.container.appendChild(toolbar);
     }
     else {
       this.img.parentElement?.appendChild(toolbar);
     }
-
-    this.toolbar = toolbar;
   }
 
   private onPointerDown(e: PointerEvent) {

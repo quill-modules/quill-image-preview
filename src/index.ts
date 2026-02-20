@@ -1,9 +1,12 @@
 import type Quill from 'quill';
-import { ImageZoom } from './zoom';
+import { ImageZoom, type ImageZoomOptions } from './zoom';
 
 export interface QuillImagePreviewOptions {
   enableOnEdit: boolean;
   beforePreviewDisplay: (this: QuillImagePreview, img: HTMLImageElement) => boolean;
+  zoomOptions?: Omit<ImageZoomOptions, 'buttons' | 'onZoomChange'> & {
+    buttons?: ImageZoomOptions['buttons'];
+  };
 }
 export class QuillImagePreview {
   options: QuillImagePreviewOptions;
@@ -16,6 +19,7 @@ export class QuillImagePreview {
     return Object.assign({
       enableOnEdit: true,
       beforePreviewDisplay: () => false,
+      zoomOptions: {},
     }, options);
   }
 
@@ -38,7 +42,7 @@ export class QuillImagePreview {
     const wrapper = temp.children[0] as HTMLElement;
     const zoomImg = wrapper.querySelector('img') as HTMLImageElement;
 
-    const zoom = new ImageZoom(zoomImg, wrapper);
+    const zoom = new ImageZoom(zoomImg, wrapper, this.options.zoomOptions);
 
     wrapper.addEventListener('click', () => {
       if (zoom.shouldPreventClose()) {
